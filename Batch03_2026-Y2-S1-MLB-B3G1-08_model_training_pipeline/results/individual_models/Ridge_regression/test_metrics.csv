@@ -1,0 +1,2 @@
+member_id,model,selected_preprocessing,best_cv_rmsle,holdout_rmsle,rmse,mae,r2,best_model_parameters
+MEMBER1,Ridge Regression,StandardScaler,0.11106243305908763,0.12954003165821912,22014.13637096535,14764.183481062588,0.9368185671548929,"{""regressor__alpha"": 30}"

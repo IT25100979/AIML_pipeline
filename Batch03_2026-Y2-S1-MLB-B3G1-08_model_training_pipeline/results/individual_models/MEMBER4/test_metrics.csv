@@ -1,0 +1,2 @@
+member_id,model,selected_preprocessing,best_cv_rmsle,holdout_rmsle,rmse,mae,r2,best_model_parameters
+MEMBER4,Support Vector Regression,StandardScaler,0.10826440801378116,0.12864329957767806,22148.408973239344,13972.413021367272,0.936045481405182,"{""regressor__C"": 3, ""regressor__epsilon"": 0.05, ""regressor__gamma"": 0.001}"

@@ -1,0 +1,4 @@
+stage,rows,mean_price,median_price,houses_over_400k
+original,1460,180921.0,163000.0,28
+rejected_sequential_iqr_filter,1251,173398.0,159950.0,3
+final_targeted_removal_plus_log,1458,180933.0,163000.0,28

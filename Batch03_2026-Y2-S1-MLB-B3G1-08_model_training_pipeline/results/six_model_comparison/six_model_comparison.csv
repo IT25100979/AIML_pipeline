@@ -1,0 +1,7 @@
+member_id,model,selected_preprocessing,best_cv_rmsle,holdout_rmsle,rmse,mae,r2,best_model_parameters
+MEMBER4,Support Vector Regression,StandardScaler,0.1082644080137787,0.1286432995776781,22148.40897323768,13972.413021366649,0.9360454814051916,"{""regressor__C"": 3, ""regressor__epsilon"": 0.05, ""regressor__gamma"": 0.001}"
+MEMBER1,Ridge Regression,StandardScaler,0.1110624330590876,0.1295400316582191,22014.13637096535,14764.183481062588,0.9368185671548928,"{""regressor__alpha"": 30}"
+MEMBER6,Histogram Gradient Boosting,StandardScaler,0.1196432355373604,0.1318645563010138,24673.607456438353,15101.919471163244,0.9206308977649512,"{""regressor__learning_rate"": 0.1, ""regressor__max_depth"": 3, ""regressor__max_iter"": 300}"
+MEMBER3,Random Forest,StandardScaler,0.1374129668084556,0.1449076645218671,28437.88423766349,16965.63764434107,0.8945659887115386,"{""regressor__max_depth"": null, ""regressor__min_samples_leaf"": 1, ""regressor__n_estimators"": 200}"
+MEMBER5,K-Nearest Neighbors,StandardScaler,0.1619436946947044,0.1819584661701987,38842.69008009064,21648.297455793247,0.8032998164740033,"{""regressor__n_neighbors"": 8, ""regressor__weights"": ""distance""}"
+MEMBER2,Decision Tree,MinMaxScaler,0.1877354038922432,0.1912058469401476,37784.83587318395,24286.96050032056,0.8138679133847407,"{""regressor__max_depth"": 12, ""regressor__min_samples_leaf"": 10}"

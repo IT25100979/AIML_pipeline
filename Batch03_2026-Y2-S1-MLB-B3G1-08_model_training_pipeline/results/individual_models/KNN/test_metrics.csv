@@ -1,0 +1,2 @@
+member_id,model,selected_preprocessing,best_cv_rmsle,holdout_rmsle,rmse,mae,r2,best_model_parameters
+MEMBER5,K-Nearest Neighbors,StandardScaler,0.16194369469470443,0.18195846617019873,38842.69008009064,21648.297455793247,0.8032998164740033,"{""regressor__n_neighbors"": 8, ""regressor__weights"": ""distance""}"

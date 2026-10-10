@@ -1,0 +1,2 @@
+member_id,model,selected_preprocessing,best_cv_rmsle,holdout_rmsle,rmse,mae,r2,best_model_parameters
+MEMBER3,Random Forest,StandardScaler,0.1374129668084556,0.14490766452186718,28437.88423766349,16965.63764434107,0.8945659887115386,"{""regressor__max_depth"": null, ""regressor__min_samples_leaf"": 1, ""regressor__n_estimators"": 200}"

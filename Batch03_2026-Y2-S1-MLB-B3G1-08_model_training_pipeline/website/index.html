@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ames Housing | Group Project Dashboard</title>
+<style>
+:root{--navy:#10243a;--teal:#087f8c;--ink:#172b3d;--muted:#5e7182;--paper:#f4f7fa;--line:#dce5eb;--gold:#f0b54a}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Segoe UI,Arial,sans-serif}
+header{background:linear-gradient(125deg,#10243a,#17425e 70%,#126777);color:#fff;padding:36px 24px}
+.wrap{max-width:1100px;margin:auto;padding:0 24px}header .wrap{padding:0}
+h1{margin:0 0 6px;font-size:32px;letter-spacing:-.5px}header p{margin:0;color:#d6e4ec}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}.v{font-size:24px;font-weight:700}
+h2{margin:28px 0 10px}table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);font-size:14px}th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}
+th{background:#eef3f7;color:var(--muted);font-size:12px;text-transform:uppercase}tr.best td{background:#e5f5f3;font-weight:600}
+.bar{height:14px;background:#9cb7c5;border-radius:4px}.bar.best{background:var(--teal)}
+.row{display:flex;align-items:center;gap:10px;margin:7px 0}.row .n{width:210px;font-size:13px}.row .t{flex:1}.row .x{width:60px;font-size:13px;text-align:right}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;cursor:pointer;font:inherit}
+.tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.imgs{display:flex;flex-wrap:wrap;gap:14px}.imgs img{max-width:100%;border:1px solid var(--line);border-radius:10px;background:#fff}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}.gal img{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff}.gal figcaption{font-size:12px;color:var(--muted);margin-top:4px}
+.note{background:#fff8e6;border:1px solid #f3dca2;border-radius:12px;padding:12px 16px;font-size:14px;margin:20px 0}
+footer{color:var(--muted);font-size:13px;padding:30px 0 50px}
+@media(max-width:700px){.kpis{grid-template-columns:repeat(2,1fr)}.row .n{width:120px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Ames Housing Price Prediction</h1><p>IT2011 AI &amp; ML group project &middot; six regression models, held-out 20% evaluation</p></div></header>
+<div class="wrap">
+  <div id="err" class="note" style="display:none">Could not load the results CSV. Start this page with <b>start_local_website.bat</b> (a local server is needed to read files).</div>
+  <div class="kpis" id="kpis"></div>
+  <h2>Hold-out RMSLE by model <small style="font-weight:400;color:var(--muted)">(lower is better)</small></h2>
+  <div class="card" id="bars"></div>
+  <h2>All metrics</h2>
+  <table id="tbl"><thead><tr><th>Member</th><th>Model</th><th>CV RMSLE</th><th>Hold-out RMSLE</th><th>RMSE ($)</th><th>MAE ($)</th><th>R&sup2;</th></tr></thead><tbody></tbody></table>
+  <h2>Actual vs predicted</h2>
+  <div class="tabs" id="tabs"></div><div class="imgs" id="imgs"></div>
+  <h2>EDA visualizations</h2>
+  <div class="gal" id="gal"></div>
+  <div class="note">This dashboard shows saved results from one 80/20 split of the Ames, Iowa data (2006&ndash;2010). It is not a live price predictor.</div>
+  <footer>RMSLE = error on log(price). RMSE and MAE are in US dollars. R&sup2; = share of price variance explained.</footer>
+</div>
+<script>
+const R='../results/';
+const eda=[['MissingData/missing_values_bar.png','Missing values per column'],['Encoding/neighborhood_median_price.png','Median price by neighborhood'],['OutlierRemoval/grlivarea_scatter.png','Extreme partial sales'],['OutlierRemoval/saleprice_log_transform.png','Log transform of the target'],['Scaling/scaler_effect_knn.png','Effect of scaling on KNN'],['FeatureSelection/correlation_heatmap.png','Correlation heatmap'],['PCA/pca_variance.png','PCA scree plot'],['GroupPipeline/pipeline_pca.png','Integrated pipeline PCA']];
+fetch(R+'six_model_comparison/six_model_comparison.csv').then(r=>{if(!r.ok)throw 0;return r.text()}).then(t=>{
+  const [h,...ls]=t.trim().split(/\r?\n/);const cols=h.split(',');
+  const rows=ls.map(l=>{const m=l.match(/("([^"]|"")*"|[^,]*)(,|$)/g).map(s=>s.replace(/,$/,'').replace(/^"|"$/g,'').replace(/""/g,'"'));const o={};cols.forEach((c,i)=>o[c]=m[i]);return o}).sort((a,b)=>a.holdout_rmsle-b.holdout_rmsle);
+  const b=rows[0],f=(x,d=4)=>(+x).toFixed(d),$=x=>'$'+Math.round(+x).toLocaleString();
+  document.getElementById('kpis').innerHTML=[['Top model',b.model],['Hold-out RMSLE',f(b.holdout_rmsle)],['Typical error (MAE)',$(b.mae)],['R\u00b2',f(b.r2,3)]].map(([k,v])=>`<div class="card"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+  const mx=Math.max(...rows.map(r=>+r.holdout_rmsle));
+  document.getElementById('bars').innerHTML=rows.map((r,i)=>`<div class="row"><div class="n">${r.model}</div><div class="t"><div class="bar ${i?'':'best'}" style="width:${+r.holdout_rmsle/mx*100}%"></div></div><div class="x">${f(r.holdout_rmsle,3)}</div></div>`).join('');
+  document.querySelector('#tbl tbody').innerHTML=rows.map((r,i)=>`<tr class="${i?'':'best'}"><td>${r.member_id}</td><td>${r.model}</td><td>${f(r.best_cv_rmsle)}</td><td>${f(r.holdout_rmsle)}</td><td>${$(r.rmse)}</td><td>${$(r.mae)}</td><td>${f(r.r2)}</td></tr>`).join('');
+  const tabs=document.getElementById('tabs'),imgs=document.getElementById('imgs');
+  const show=i=>{[...tabs.children].forEach((x,j)=>x.classList.toggle('on',i==j));const r=rows[i];imgs.innerHTML=`<img src="${R}individual_models/${r.member_id}/actual_vs_predicted.png" width="430"><img src="${R}individual_models/${r.member_id}/model_metrics.png" width="640">`};
+  rows.forEach((r,i)=>{const bt=document.createElement('button');bt.textContent=r.model;bt.onclick=()=>show(i);tabs.appendChild(bt)});show(0);
+}).catch(()=>{document.getElementById('err').style.display='block'});
+document.getElementById('gal').innerHTML=eda.map(([p,c])=>`<figure style="margin:0"><img src="${R}eda_visualizations/${p}" alt="${c}"><figcaption>${c}</figcaption></figure>`).join('');
+</script>
+</body>
+</html>

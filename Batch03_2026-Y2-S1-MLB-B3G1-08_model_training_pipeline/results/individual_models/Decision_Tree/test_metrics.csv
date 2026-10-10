@@ -1,0 +1,2 @@
+member_id,model,selected_preprocessing,best_cv_rmsle,holdout_rmsle,rmse,mae,r2,best_model_parameters
+MEMBER2,Decision Tree,MinMaxScaler,0.18773540389224325,0.19120584694014764,37784.83587318395,24286.96050032056,0.8138679133847407,"{""regressor__max_depth"": 12, ""regressor__min_samples_leaf"": 10}"

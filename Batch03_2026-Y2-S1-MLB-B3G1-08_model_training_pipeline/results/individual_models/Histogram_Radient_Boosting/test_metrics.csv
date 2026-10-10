@@ -1,0 +1,2 @@
+member_id,model,selected_preprocessing,best_cv_rmsle,holdout_rmsle,rmse,mae,r2,best_model_parameters
+MEMBER6,Histogram Gradient Boosting,StandardScaler,0.11964323553736045,0.13186455630101382,24673.607456438353,15101.919471163243,0.9206308977649511,"{""regressor__learning_rate"": 0.1, ""regressor__max_depth"": 3, ""regressor__max_iter"": 300}"
